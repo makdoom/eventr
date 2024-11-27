@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import AuthModal from "./AuthModal";
 
 const Navbar = () => {
   return (
@@ -8,7 +8,7 @@ const Navbar = () => {
         Even<span className="text-primary">tr</span>
       </Link>
 
-      <Button> Get Started</Button>
+      <AuthModal />
     </div>
   );
 };
