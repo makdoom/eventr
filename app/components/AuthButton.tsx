@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+import { Loader } from "lucide-react";
 import { useFormStatus } from "react-dom";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 
@@ -16,7 +16,7 @@ const AuthButton = ({ type }: AuthButtonType) => {
     <div className="w-full">
       {pending ? (
         <Button disabled variant="outline" className="w-full">
-          <Loader2 className="size-4 animate-spin mr-2" />
+          <Loader className="size-4 animate-spin mr-2" />
           Please wait ...
         </Button>
       ) : (

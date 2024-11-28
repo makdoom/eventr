@@ -22,17 +22,16 @@ const AuthModal = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button> Try for free</Button>
+        <Button variant="default"> Try for free</Button>
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[360px]">
-        <DialogHeader className="flex items-center justify-center">
-          <DialogTitle className="font-bold text-2xl tracking-normal">
+        <DialogHeader className="flex items-center justify-center my-4">
+          <DialogTitle className="font-bold text-3xl tracking-normal">
             Even<span className="text-primary">tr</span>
           </DialogTitle>
         </DialogHeader>
 
-        {/* <DialogDescription className="flex flex-col mt-5 gap-3"> */}
         <form action={handleGoogleAuth} className="w-full">
           <AuthButton type="google" />
         </form>
@@ -40,7 +39,6 @@ const AuthModal = () => {
         <form action={handleGithubAuth} className="w-full">
           <AuthButton type="github" />
         </form>
-        {/* </DialogDescription> */}
       </DialogContent>
     </Dialog>
   );
