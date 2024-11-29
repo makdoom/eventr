@@ -3,10 +3,10 @@
 import { cn } from "@/lib/utils";
 import {
   Calendar,
-  House,
   LucideIcon,
   Presentation,
   Settings,
+  Link as LinkIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -19,7 +19,7 @@ type LinkType = {
 };
 
 const links: LinkType[] = [
-  { id: 0, name: "Event Types", href: "/dashboard", icon: House },
+  { id: 0, name: "Event Types", href: "/dashboard", icon: LinkIcon },
   { id: 1, name: "Meetings", href: "/dashboard/meetings", icon: Presentation },
   {
     id: 2,
@@ -40,7 +40,7 @@ const SidebarLinks = () => {
           href={link.href}
           key={link.id}
           className={cn(
-            "flex items-center gap-3 rounded-md p-2 px-3 transition-all",
+            "flex items-center gap-3 rounded-md p-2 px-3 mt-2 transition-all",
             link.href == pathname
               ? "text-primary bg-primary/10 font-medium"
               : "text-muted-foreground hover:text-foreground"

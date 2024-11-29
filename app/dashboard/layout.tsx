@@ -102,7 +102,8 @@ const DashboardLayout = async ({ children }: { children: ReactNode }) => {
             </DropdownMenu>
           </div>
         </header>
-        {children}
+
+        <main className="p-4">{children}</main>
       </SidebarInset>
     </SidebarProvider>
   );
