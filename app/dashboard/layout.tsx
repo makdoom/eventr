@@ -20,9 +20,23 @@ import { signOut } from "../lib/auth";
 import { LogOut, Settings, UserRound } from "lucide-react";
 import Link from "next/link";
 import { getUserSession } from "../lib/hooks";
+import prisma from "../lib/db";
+import { redirect } from "next/navigation";
+
+const checkForUsername = async (userId: string) => {
+  const data = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { username: true },
+  });
+  if (!data?.username) return redirect("/onboarding");
+
+  return data;
+};
 
 const DashboardLayout = async ({ children }: { children: ReactNode }) => {
   const session = await getUserSession();
+
+  await checkForUsername(session.user?.id as string);
 
   return (
     <SidebarProvider>

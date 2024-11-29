@@ -18,31 +18,30 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-const formSchema = z.object({
-  fullName: z.string().min(2, {
-    message: "Full name must be at least 2 characters.",
-  }),
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-});
+import { onboardingSchema, OnBoardingSchemaType } from "@/schemas";
+import { onboardingAction } from "../actions/onboarding.action";
+import { Loader } from "lucide-react";
 
 const Onboarding = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<OnBoardingSchemaType>({
+    resolver: zodResolver(onboardingSchema),
     defaultValues: {
       fullName: "",
       username: "",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  const { isSubmitting } = form.formState;
+
+  const onSubmit = async (values: OnBoardingSchemaType) => {
+    try {
+      await onboardingAction(values);
+    } catch (error) {
+      if (error instanceof Error) {
+        console.log(error.message);
+      }
+    }
   };
 
   return (
@@ -74,7 +73,7 @@ const Onboarding = () => {
                       <Input
                         autoFocus
                         placeholder="John Doe"
-                        className="placeholder:text-sm"
+                        className="placeholder:text-sm text-sm"
                         {...field}
                       />
                     </FormControl>
@@ -96,7 +95,7 @@ const Onboarding = () => {
                         <Input
                           placeholder="johndoe11"
                           {...field}
-                          className="rounded-l-none border-none p-2 focus-visible:ring-transparent h-9 placeholder:text-sm"
+                          className="rounded-l-none border-none p-2 focus-visible:ring-transparent h-9 placeholder:text-sm text-sm"
                         />
                       </div>
                     </FormControl>
@@ -104,9 +103,16 @@ const Onboarding = () => {
                   </FormItem>
                 )}
               />
-              <Button className="w-full" type="submit">
-                Submit
-              </Button>
+              {isSubmitting ? (
+                <Button disabled className="w-full">
+                  <Loader className="size-4 mr-2 animate-spin" />
+                  Please wait ...
+                </Button>
+              ) : (
+                <Button className="w-full" type="submit">
+                  Submit
+                </Button>
+              )}
             </form>
           </Form>
         </CardContent>
