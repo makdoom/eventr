@@ -17,6 +17,7 @@ model User {
   username      String?   @unique
   grantId       String?
   grantEmail    String?
+  about         String?
   accounts      Account[]
   sessions      Session[]
 

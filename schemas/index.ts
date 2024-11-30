@@ -15,3 +15,14 @@ export const onboardingSchema = z.object({
 });
 
 export type OnBoardingSchemaType = z.infer<typeof onboardingSchema>;
+
+export const SettingSchema = z.object({
+  fullName: z.string().min(2, {
+    message: "Full name must be at least 2 characters.",
+  }),
+  username: z.string(),
+  email: z.string().email(),
+  about: z.string(),
+  image: z.string(),
+});
+export type SettingSchemaType = z.infer<typeof SettingSchema>;

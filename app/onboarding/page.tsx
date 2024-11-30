@@ -77,7 +77,7 @@ const Onboarding = () => {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="" />
                   </FormItem>
                 )}
               />
