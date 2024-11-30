@@ -3,7 +3,7 @@
 import { SettingSchemaType } from "@/schemas";
 import { getUserSession } from "../lib/hooks";
 import prisma from "../lib/db";
-// import { redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 
 export const updatedSettingAction = async (formData: SettingSchemaType) => {
   try {
@@ -19,5 +19,5 @@ export const updatedSettingAction = async (formData: SettingSchemaType) => {
     throw error;
   }
 
-  //   return redirect("/onboarding/grant-permission");
+  return redirect("/dashboard");
 };

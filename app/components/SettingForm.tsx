@@ -152,7 +152,7 @@ const SettingForm = ({
                     <FormControl>
                       <Textarea
                         placeholder="Tell us a little bit about yourself"
-                        className="resize-none"
+                        className="resize-none text-sm"
                         {...field}
                       />
                     </FormControl>
