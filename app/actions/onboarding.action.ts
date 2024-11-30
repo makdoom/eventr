@@ -25,5 +25,5 @@ export const onboardingAction = async (formData: OnBoardingSchemaType) => {
     throw error;
   }
 
-  return redirect("/dashboard");
+  return redirect("/onboarding/grant-permission");
 };

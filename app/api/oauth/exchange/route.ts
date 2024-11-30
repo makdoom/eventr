@@ -33,5 +33,5 @@ export const GET = async (req: NextRequest) => {
     console.log("Something went wrong while exchnage", error);
   }
 
-  return redirect("/");
+  return redirect("/dashboard");
 };

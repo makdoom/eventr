@@ -26,9 +26,10 @@ import { redirect } from "next/navigation";
 const checkForUsername = async (userId: string) => {
   const data = await prisma.user.findUnique({
     where: { id: userId },
-    select: { username: true },
+    select: { username: true, grantId: true },
   });
   if (!data?.username) return redirect("/onboarding");
+  if (!data?.grantId) return redirect("/onboarding/grant-permission");
 
   return data;
 };
