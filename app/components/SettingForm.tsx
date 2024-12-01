@@ -87,7 +87,7 @@ const SettingForm = ({
               </Avatar>
               <div className="flex gap-2">
                 <UploadButton
-                  className="ut-button:text-primary ut-button:text-sm ut-button:focus-within:ring-primary ut-button:font-medium ut-button:bg-secondary "
+                  className="ut-button:text-primary ut-button:text-sm ut-button:focus-within:ring-primary ut-button:font-medium ut-button:bg-secondary ut-allowed-content:text-muted-foreground"
                   endpoint="imageUploader"
                   content={{ button: "Update Profile" }}
                   onClientUploadComplete={(res) => {
@@ -137,6 +137,24 @@ const SettingForm = ({
                           className="rounded-l-none border-none p-2 focus-visible:ring-transparent h-9 placeholder:text-sm text-sm"
                         />
                       </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="email"
+                disabled
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        autoFocus
+                        className="placeholder:text-sm text-sm"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
