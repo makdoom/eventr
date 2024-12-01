@@ -21,7 +21,7 @@ export const SettingSchema = z.object({
     message: "Full name must be at least 2 characters.",
   }),
   username: z.string(),
-  email: z.string().email(),
+  email: z.string(),
   about: z.string(),
   image: z.string(),
 });

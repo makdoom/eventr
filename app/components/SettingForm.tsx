@@ -26,6 +26,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { updatedSettingAction } from "../actions/updateSetting.action";
 import { UploadButton } from "../lib/uploadthing";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 type SettingFormPropType = {
   name: string;
@@ -42,6 +43,7 @@ const SettingForm = ({
   email,
   about,
 }: SettingFormPropType) => {
+  const router = useRouter();
   const form = useForm<SettingSchemaType>({
     resolver: zodResolver(SettingSchema),
     defaultValues: {
@@ -57,7 +59,11 @@ const SettingForm = ({
 
   const onSubmit = async (values: SettingSchemaType) => {
     try {
-      await updatedSettingAction(values);
+      const isUpdated = await updatedSettingAction(values);
+      if (isUpdated) {
+        toast.success("Settings updated successfully");
+        router.push("/dashboard");
+      }
     } catch (error) {
       if (error instanceof Error) {
         console.log(error.message);
@@ -145,13 +151,13 @@ const SettingForm = ({
               <FormField
                 control={form.control}
                 name="email"
-                disabled
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
                       <Input
                         autoFocus
+                        disabled
                         className="placeholder:text-sm text-sm"
                         {...field}
                       />

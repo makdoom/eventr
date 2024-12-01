@@ -3,7 +3,6 @@
 import { SettingSchemaType } from "@/schemas";
 import { getUserSession } from "../lib/hooks";
 import prisma from "../lib/db";
-import { redirect } from "next/navigation";
 
 export const updatedSettingAction = async (formData: SettingSchemaType) => {
   try {
@@ -15,9 +14,9 @@ export const updatedSettingAction = async (formData: SettingSchemaType) => {
       where: { id: session.user?.id },
       data: { name: fullName, image, about },
     });
+
+    return true;
   } catch (error) {
     throw error;
   }
-
-  return redirect("/dashboard");
 };
