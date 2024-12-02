@@ -9,17 +9,18 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String         @id @default(cuid())
   name          String?
-  email         String    @unique
+  email         String         @unique
   emailVerified DateTime?
   image         String?
-  username      String?   @unique
+  username      String?        @unique
   grantId       String?
   grantEmail    String?
   about         String?
   accounts      Account[]
   sessions      Session[]
+  availability  Availability[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -62,4 +63,27 @@ model VerificationToken {
   expires    DateTime
 
   @@id([identifier, token])
+}
+
+enum Day {
+  Sunday
+  Monday
+  Tuesday
+  Wednesday
+  Thursday
+  Friday
+  Saturday
+}
+
+model Availability {
+  id       String  @id @default(cuid())
+  day      Day
+  fromTime String
+  tillTime String
+  isActive Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    String?
 }
