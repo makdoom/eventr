@@ -9,18 +9,18 @@ datasource db {
 }
 
 model User {
-  id            String         @id @default(cuid())
-  name          String?
-  email         String         @unique
-  emailVerified DateTime?
-  image         String?
-  username      String?        @unique
-  grantId       String?
-  grantEmail    String?
-  about         String?
-  accounts      Account[]
-  sessions      Session[]
-  availability  Availability[]
+  id                   String                 @id @default(cuid())
+  name                 String?
+  email                String                 @unique
+  emailVerified        DateTime?
+  image                String?
+  username             String?                @unique
+  grantId              String?
+  grantEmail           String?
+  about                String?
+  accounts             Account[]
+  sessions             Session[]
+  availabilitySchedule AvailabilitySchedule[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -65,25 +65,50 @@ model VerificationToken {
   @@id([identifier, token])
 }
 
-enum Day {
-  Sunday
-  Monday
-  Tuesday
-  Wednesday
-  Thursday
-  Friday
-  Saturday
-}
+// enum Day {
+//   Sunday
+//   Monday
+//   Tuesday
+//   Wednesday
+//   Thursday
+//   Friday
+//   Saturday
+// }
 
-model Availability {
-  id       String  @id @default(cuid())
-  day      Day
-  fromTime String
-  tillTime String
-  isActive Boolean @default(true)
+// model Availability {
+//   id       String  @id @default(cuid())
+//   day      Day
+//   fromTime String
+//   tillTime String
+//   isActive Boolean @default(true)
+
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+//   User      User?    @relation(fields: [userId], references: [id])
+//   userId    String?
+// }
+
+model AvailabilitySchedule {
+  id        String     @id @default(cuid())
+  eventName String
+  isDefault Boolean    @default(false)
+  schedule  Schedule[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   User      User?    @relation(fields: [userId], references: [id])
   userId    String?
+}
+
+model Schedule {
+  id       String  @id @default(cuid())
+  day      String
+  isActive Boolean @default(false)
+  fromTime String
+  tillTime String
+
+  createdAt              DateTime              @default(now())
+  updatedAt              DateTime              @updatedAt
+  AvailabilitySchedule   AvailabilitySchedule? @relation(fields: [availabilityScheduleId], references: [id])
+  availabilityScheduleId String?
 }
