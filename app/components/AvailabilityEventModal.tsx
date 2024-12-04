@@ -108,7 +108,7 @@ const AvaialbilityEventModal = () => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
+      <DialogTrigger asChild onClick={() => setOpen(true)}>
         <Button>
           <Plus />
           New
