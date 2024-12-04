@@ -31,7 +31,7 @@ const ScheduleCard = ({
   const onDelete = async () => {
     try {
       await deleteAvailabilityEvent(id);
-      toast.success("Event deleted successfully");
+      toast.success("Schedule deleted successfully");
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
@@ -44,7 +44,7 @@ const ScheduleCard = ({
   const onCopy = async () => {
     try {
       await copyAvailabilityEvent(id);
-      toast.success("Event copied successfully");
+      toast.success("Schedule copied successfully");
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
@@ -57,7 +57,7 @@ const ScheduleCard = ({
   const onUpdateDefault = async () => {
     try {
       await updateDefaultEvent(id);
-      toast.success("Event updated successfully");
+      toast.success("Schedule updated successfully");
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);

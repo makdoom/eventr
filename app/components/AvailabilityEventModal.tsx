@@ -92,7 +92,7 @@ const AvaialbilityEventModal = () => {
   const onSubmit = async (data: ScheduleFormValues) => {
     try {
       await createNewAvailablityEvent(data);
-      toast.success("New event schedule created !");
+      toast.success("New schedule created !");
       form.reset();
       setOpen(false);
     } catch (error) {
