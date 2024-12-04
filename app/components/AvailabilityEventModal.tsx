@@ -28,13 +28,15 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { ScheduleFormValues, scheduleSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus } from "lucide-react";
+import { Loader, Plus } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { times } from "../lib/times";
 import { toast } from "sonner";
 import { createNewAvailablityEvent } from "../actions/availableTimes.action";
+import { useState } from "react";
 
 const AvaialbilityEventModal = () => {
+  const [open, setOpen] = useState(false);
   const form = useForm({
     resolver: zodResolver(scheduleSchema),
     defaultValues: {
@@ -89,8 +91,10 @@ const AvaialbilityEventModal = () => {
 
   const onSubmit = async (data: ScheduleFormValues) => {
     try {
-      const event = await createNewAvailablityEvent(data);
-      console.log(event);
+      await createNewAvailablityEvent(data);
+      toast.success("New event schedule created !");
+      form.reset();
+      setOpen(false);
     } catch (error) {
       if (error instanceof Error) {
         toast.error(
@@ -103,7 +107,7 @@ const AvaialbilityEventModal = () => {
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>
           <Plus />
@@ -249,7 +253,12 @@ const AvaialbilityEventModal = () => {
             </div>
 
             <div className="flex items-center justify-end">
-              <Button size="lg">Save</Button>
+              <Button size="lg" disabled={form.formState.isSubmitting}>
+                {form.formState.isSubmitting && (
+                  <Loader className="animate-spin " />
+                )}
+                Save
+              </Button>
             </div>
           </form>
         </Form>
