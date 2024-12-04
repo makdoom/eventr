@@ -31,12 +31,12 @@ const getFormattedTimeStr = (data: Schedule[]) => {
         if (!acc.includes(prevItem.day)) {
           acc += ` to ${prevItem.day}, ${prevItem.fromTime} - ${prevItem.tillTime}`;
         } else {
-          acc += ` ${prevItem.fromTime} - ${prevItem.tillTime}`;
+          acc += `- ${prevItem.fromTime} - ${prevItem.tillTime}`;
         }
 
-        acc += `|${curr.day} - `;
+        acc += `|${curr.day} `;
         if (index == filtered.length - 1) {
-          acc += `${curr.fromTime} - ${curr.tillTime}`;
+          acc += `- ${curr.fromTime} - ${curr.tillTime}`;
         }
       } else if (index == filtered.length - 1) {
         acc += ` to ${curr.day}, ${curr.fromTime}  -  ${curr.tillTime}`;
@@ -73,9 +73,17 @@ const AvailabilityClient = ({
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         <div className="flex flex-col gap-2 h-[calc(100vh-190px)] overflow-auto no-scrollbar">
+          {filteredList.length == 0 && (
+            <div className="text-center mt-16">
+              <p>
+                No event found {searchTerm ? `related to "${searchTerm}"` : ""}
+              </p>
+            </div>
+          )}
           {filteredList.map((item) => (
             <ScheduleCard
               key={item.id}
+              id={item.id}
               eventName={item.eventName}
               isDefault={item.isDefault}
               schedule={item.schedule}

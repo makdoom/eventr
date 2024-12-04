@@ -29,7 +29,7 @@ export const SettingSchema = z.object({
 export type SettingSchemaType = z.infer<typeof SettingSchema>;
 
 export const scheduleSchema = z.object({
-  eventName: z.string(),
+  eventName: z.string().min(3, "Event name is required"),
   isDefault: z.boolean().default(false),
   schedule: z.array(
     z.object({

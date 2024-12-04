@@ -43,8 +43,83 @@ export const createNewAvailablityEvent = async (
         },
       },
     });
+  } catch (error) {
+    throw error;
+  }
 
-    // return result;
+  revalidatePath("/dashboard/availability");
+};
+
+export const deleteAvailabilityEvent = async (eventId: string) => {
+  try {
+    const session = await getUserSession();
+
+    await prisma.availabilitySchedule.delete({
+      where: { id: eventId, userId: session?.user?.id },
+    });
+  } catch (error) {
+    throw error;
+  }
+
+  revalidatePath("/dashboard/availability");
+};
+
+export const copyAvailabilityEvent = async (eventId: string) => {
+  try {
+    const session = await getUserSession();
+
+    await prisma.$transaction(async (tx) => {
+      // Get existing event
+      const eventToCopy = await tx.availabilitySchedule.findUnique({
+        where: { id: eventId, userId: session.user?.id },
+        select: { eventName: true, isDefault: true, schedule: true },
+      });
+
+      if (!eventToCopy) throw new Error("Event not found");
+
+      // Create new event
+      await tx.availabilitySchedule.create({
+        data: {
+          userId: session.user?.id,
+          eventName: `${eventToCopy?.eventName} - Copy`,
+          isDefault: false,
+          schedule: {
+            create: eventToCopy.schedule.map((item) => ({
+              day: item.day,
+              isActive: item.isActive,
+              fromTime: item.fromTime,
+              tillTime: item.tillTime,
+            })),
+          },
+        },
+      });
+    });
+  } catch (error) {
+    throw error;
+  }
+
+  revalidatePath("/dashboard/availability");
+};
+
+export const updateDefaultEvent = async (eventId: string) => {
+  try {
+    const session = await getUserSession();
+
+    await prisma.$transaction(async (tx) => {
+      // Get existing event
+      await tx.availabilitySchedule.updateMany({
+        where: { userId: session.user?.id, isDefault: true },
+        data: { isDefault: false },
+      });
+
+      // Create new event
+      await tx.availabilitySchedule.update({
+        where: { id: eventId, userId: session.user?.id },
+        data: {
+          isDefault: true,
+        },
+      });
+    });
   } catch (error) {
     throw error;
   }
