@@ -15,6 +15,7 @@ export const getAvailableTimes = async (userId: string) => {
       schedule: true,
       createdAt: true,
     },
+    orderBy: { createdAt: "desc" },
   });
 
   return data;

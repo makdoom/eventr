@@ -1,5 +1,4 @@
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -41,11 +40,9 @@ const ScheduleCard = ({
         </div>
       </div>
       <DropdownMenu>
-        <Button size="icon" variant="secondary">
-          <DropdownMenuTrigger className="outline-none">
-            <Ellipsis className="!size-5" />
-          </DropdownMenuTrigger>
-        </Button>
+        <DropdownMenuTrigger className="outline-none bg-secondary p-3 rounded-md">
+          <Ellipsis className="!size-5" />
+        </DropdownMenuTrigger>
         <DropdownMenuContent className="!mr-8 space-y-2">
           <DropdownMenuItem className="cursor-pointer">
             <Copy />
