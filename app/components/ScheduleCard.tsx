@@ -13,6 +13,7 @@ import {
   updateDefaultEvent,
 } from "../actions/availableTimes.action";
 import { toast } from "sonner";
+import { useAvailabilityDialog } from "@/store/availabilityStore";
 
 type ScheduleCardPropType = {
   id: string;
@@ -25,9 +26,12 @@ type ScheduleCardPropType = {
 const ScheduleCard = ({
   id,
   eventName,
+  schedule,
   isDefault,
   scheduleTimeList,
 }: ScheduleCardPropType) => {
+  const { handleOpen, handleDialogData } = useAvailabilityDialog();
+
   const onDelete = async () => {
     try {
       await deleteAvailabilityEvent(id);
@@ -66,8 +70,17 @@ const ScheduleCard = ({
       }
     }
   };
+
+  const handleOpenInEditMode = () => {
+    handleDialogData({ id, eventName, isDefault, schedule });
+    handleOpen("EDIT");
+  };
+
   return (
-    <div className="p-4 border rounded-md flex items-center justify-between">
+    <div
+      className="p-4 border rounded-md flex items-center justify-between cursor-pointer hover:bg-muted group transition-all"
+      onClick={handleOpenInEditMode}
+    >
       <div className="space-y-1">
         <div className="flex items-center gap-4">
           <h3 className="font-medium">{eventName} </h3>
@@ -86,7 +99,7 @@ const ScheduleCard = ({
         </div>
       </div>
       <DropdownMenu>
-        <DropdownMenuTrigger className="outline-none bg-secondary p-3 rounded-md">
+        <DropdownMenuTrigger className="outline-none bg-secondary  p-2 rounded-md group-hover:bg-primary-foreground">
           <Ellipsis className="!size-5" />
         </DropdownMenuTrigger>
         <DropdownMenuContent className="!mr-8 space-y-2">

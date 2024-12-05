@@ -28,24 +28,89 @@ export const createNewAvailablityEvent = async (
     const session = await getUserSession();
     const { eventName, schedule, isDefault } = formData;
 
-    await prisma.availabilitySchedule.create({
-      data: {
-        eventName: eventName,
-        isDefault: isDefault,
-        userId: session?.user?.id || null,
-        schedule: {
-          create: schedule.map((item) => ({
-            day: item.day,
-            isActive: item.isActive,
-            fromTime: item.fromTime,
-            tillTime: item.tillTime,
-          })),
+    await prisma.$transaction(async (tx) => {
+      if (isDefault) {
+        await tx.availabilitySchedule.updateMany({
+          where: {
+            userId: session.user?.id,
+            isDefault: true,
+          },
+          data: {
+            isDefault: false,
+          },
+        });
+      }
+
+      await prisma.availabilitySchedule.create({
+        data: {
+          eventName: eventName,
+          isDefault: isDefault,
+          userId: session?.user?.id || null,
+          schedule: {
+            create: schedule.map((item) => ({
+              day: item.day,
+              isActive: item.isActive,
+              fromTime: item.fromTime,
+              tillTime: item.tillTime,
+            })),
+          },
         },
-      },
+      });
     });
   } catch (error) {
     throw error;
   }
+
+  revalidatePath("/dashboard/availability");
+};
+
+export const updateAvailabilityEvent = async (formData: ScheduleFormValues) => {
+  const session = await getUserSession();
+  const { id, eventName, schedule, isDefault } = formData;
+  console.log(id);
+
+  if (!id) return;
+
+  await prisma.$transaction(async (tx) => {
+    if (isDefault) {
+      await tx.availabilitySchedule.updateMany({
+        where: {
+          userId: session.user?.id,
+          isDefault: true,
+        },
+        data: {
+          isDefault: false,
+        },
+      });
+    }
+
+    await prisma.availabilitySchedule.update({
+      where: {
+        id,
+        userId: session.user?.id,
+      },
+      data: {
+        eventName,
+        isDefault,
+      },
+    });
+
+    const updatePromises = schedule.map((item) => {
+      return tx.schedule.updateMany({
+        where: {
+          availabilityScheduleId: id,
+          day: item.day,
+        },
+        data: {
+          isActive: item.isActive,
+          fromTime: item.fromTime,
+          tillTime: item.tillTime,
+        },
+      });
+    });
+
+    await Promise.all(updatePromises);
+  });
 
   revalidatePath("/dashboard/availability");
 };

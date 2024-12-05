@@ -68,7 +68,8 @@ const AvailabilityClient = ({
       <div className="flex flex-col gap-4 mt-10">
         <Input
           placeholder="Search event"
-          className="max-w-xs"
+          autoFocus
+          className="max-w-xs bg-secondary"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
