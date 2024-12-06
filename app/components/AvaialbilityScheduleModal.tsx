@@ -30,7 +30,6 @@ import { ScheduleFormValues, scheduleSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader, Plus } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { times } from "../lib/times";
 import { toast } from "sonner";
 import {
   createNewSchedule,
@@ -38,6 +37,7 @@ import {
 } from "../actions/availableSchedules.action";
 import { useAvailabilityDialog } from "@/store/availabilityStore";
 import { useEffect } from "react";
+import { times } from "../lib/times";
 
 const schedule = [
   {

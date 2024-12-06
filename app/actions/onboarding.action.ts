@@ -1,9 +1,9 @@
 "use server";
 
 import { OnBoardingSchemaType } from "@/schemas";
+import { redirect } from "next/navigation";
 import { getUserSession } from "../lib/hooks";
 import prisma from "../lib/db";
-import { redirect } from "next/navigation";
 
 export const onboardingAction = async (formData: OnBoardingSchemaType) => {
   try {

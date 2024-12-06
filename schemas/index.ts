@@ -51,3 +51,14 @@ export type AvailabilityType = {
   createdAt: Date;
   scheduleMessageList: string[];
 };
+
+export const eventFormSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  url: z.string(),
+  description: z.string().min(1, "Description is required"),
+  duration: z.coerce.number().min(1, "Duration must be at least 1 minute"),
+  isActive: z.boolean().default(false),
+  videoCallSoftware: z.string().default("Google Meet"),
+});
+
+export type EventFormValues = z.infer<typeof eventFormSchema>;

@@ -14,8 +14,8 @@ import {
 } from "@/components/ui/menubar";
 import { LogOut } from "lucide-react";
 import { ModeToggle } from "./ModeToggle";
-import { signOut } from "../lib/auth";
 import { Button } from "@/components/ui/button";
+import { signOut } from "../lib/auth";
 
 const AppSidebar = () => {
   return (

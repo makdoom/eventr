@@ -1,6 +1,6 @@
-import { getUserSession } from "@/app/lib/hooks";
 import { getAvailableSchedules } from "@/app/actions/availableSchedules.action";
-import AvailabilityClient from "@/app/components/AvailabilityClient";
+import AvailabilityClient from "@/app/dashboard/availability/AvailabilityClient";
+import { getUserSession } from "@/app/lib/hooks";
 
 const Availability = async () => {
   const session = await getUserSession();
