@@ -33,9 +33,9 @@ import { useForm } from "react-hook-form";
 import { times } from "../lib/times";
 import { toast } from "sonner";
 import {
-  createNewAvailablityEvent,
-  updateAvailabilityEvent,
-} from "../actions/availableTimes.action";
+  createNewSchedule,
+  updatedSchedule,
+} from "../actions/availableSchedules.action";
 import { useAvailabilityDialog } from "@/store/availabilityStore";
 import { useEffect } from "react";
 
@@ -84,7 +84,7 @@ const schedule = [
   },
 ];
 
-const AvaialbilityEventModal = () => {
+const AvaialbilityScheduleModal = () => {
   const { open, handleOpen, handleClose, mode, data } = useAvailabilityDialog();
 
   const form = useForm({
@@ -95,11 +95,11 @@ const AvaialbilityEventModal = () => {
   const onSubmit = async (data: ScheduleFormValues) => {
     try {
       if (mode == "NEW") {
-        await createNewAvailablityEvent(data);
+        await createNewSchedule(data);
         toast.success("New schedule created");
       } else {
         // console.log(data);
-        await updateAvailabilityEvent(data);
+        await updatedSchedule(data);
         toast.success("Schedule updated successfully ");
       }
       form.reset();
@@ -302,4 +302,4 @@ const AvaialbilityEventModal = () => {
     </Dialog>
   );
 };
-export default AvaialbilityEventModal;
+export default AvaialbilityScheduleModal;

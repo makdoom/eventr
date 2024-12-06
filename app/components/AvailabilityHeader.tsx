@@ -1,4 +1,4 @@
-import AvaialbilityEventModal from "@/app/components/AvailabilityEventModal";
+import AvaialbilityScheduleModal from "@/app/components/AvaialbilityScheduleModal";
 
 const AvailabilityHeader = () => {
   return (
@@ -10,7 +10,7 @@ const AvailabilityHeader = () => {
         </p>
       </div>
 
-      <AvaialbilityEventModal />
+      <AvaialbilityScheduleModal />
     </div>
   );
 };

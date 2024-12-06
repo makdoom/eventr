@@ -8,10 +8,10 @@ import {
 import { Schedule } from "@prisma/client";
 import { Copy, Ellipsis, Sparkle, Trash } from "lucide-react";
 import {
-  copyAvailabilityEvent,
-  deleteAvailabilityEvent,
-  updateDefaultEvent,
-} from "../actions/availableTimes.action";
+  copySchedule,
+  deleteSchedule,
+  updateDefaultSchedule,
+} from "../actions/availableSchedules.action";
 import { toast } from "sonner";
 import { useAvailabilityDialog } from "@/store/availabilityStore";
 
@@ -34,7 +34,7 @@ const ScheduleCard = ({
 
   const onDelete = async () => {
     try {
-      await deleteAvailabilityEvent(id);
+      await deleteSchedule(id);
       toast.success("Schedule deleted successfully");
     } catch (error) {
       if (error instanceof Error) {
@@ -47,7 +47,7 @@ const ScheduleCard = ({
 
   const onCopy = async () => {
     try {
-      await copyAvailabilityEvent(id);
+      await copySchedule(id);
       toast.success("Schedule copied successfully");
     } catch (error) {
       if (error instanceof Error) {
@@ -60,7 +60,7 @@ const ScheduleCard = ({
 
   const onUpdateDefault = async () => {
     try {
-      await updateDefaultEvent(id);
+      await updateDefaultSchedule(id);
       toast.success("Schedule updated successfully");
     } catch (error) {
       if (error instanceof Error) {
@@ -77,11 +77,8 @@ const ScheduleCard = ({
   };
 
   return (
-    <div
-      className="p-4 border rounded-md flex items-center justify-between cursor-pointer hover:bg-muted group transition-all"
-      onClick={handleOpenInEditMode}
-    >
-      <div className="space-y-1">
+    <div className="p-4 border rounded-md flex items-center justify-between cursor-pointer hover:bg-muted group transition-all">
+      <div className="space-y-1 flex-1 " onClick={handleOpenInEditMode}>
         <div className="flex items-center gap-4">
           <h3 className="font-medium">{eventName} </h3>
           {isDefault ? (

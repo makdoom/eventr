@@ -5,7 +5,7 @@ import prisma from "../lib/db";
 import { getUserSession } from "../lib/hooks";
 import { revalidatePath } from "next/cache";
 
-export const getAvailableTimes = async (userId: string) => {
+export const getAvailableSchedules = async (userId: string) => {
   const data = await prisma.availabilitySchedule.findMany({
     where: { userId },
     select: {
@@ -21,9 +21,7 @@ export const getAvailableTimes = async (userId: string) => {
   return data;
 };
 
-export const createNewAvailablityEvent = async (
-  formData: ScheduleFormValues
-) => {
+export const createNewSchedule = async (formData: ScheduleFormValues) => {
   try {
     const session = await getUserSession();
     const { eventName, schedule, isDefault } = formData;
@@ -64,7 +62,7 @@ export const createNewAvailablityEvent = async (
   revalidatePath("/dashboard/availability");
 };
 
-export const updateAvailabilityEvent = async (formData: ScheduleFormValues) => {
+export const updatedSchedule = async (formData: ScheduleFormValues) => {
   const session = await getUserSession();
   const { id, eventName, schedule, isDefault } = formData;
   console.log(id);
@@ -115,7 +113,7 @@ export const updateAvailabilityEvent = async (formData: ScheduleFormValues) => {
   revalidatePath("/dashboard/availability");
 };
 
-export const deleteAvailabilityEvent = async (eventId: string) => {
+export const deleteSchedule = async (eventId: string) => {
   try {
     const session = await getUserSession();
 
@@ -129,7 +127,7 @@ export const deleteAvailabilityEvent = async (eventId: string) => {
   revalidatePath("/dashboard/availability");
 };
 
-export const copyAvailabilityEvent = async (eventId: string) => {
+export const copySchedule = async (eventId: string) => {
   try {
     const session = await getUserSession();
 
@@ -166,7 +164,7 @@ export const copyAvailabilityEvent = async (eventId: string) => {
   revalidatePath("/dashboard/availability");
 };
 
-export const updateDefaultEvent = async (eventId: string) => {
+export const updateDefaultSchedule = async (eventId: string) => {
   try {
     const session = await getUserSession();
 
