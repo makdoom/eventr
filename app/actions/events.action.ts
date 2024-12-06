@@ -23,6 +23,10 @@ export const getUserEvents = async () => {
             description: true,
             isActive: true,
             duration: true,
+            videoCallSoftware: true,
+          },
+          orderBy: {
+            createdAt: "desc",
           },
         },
       },
@@ -43,6 +47,23 @@ export const createNewEvent = async (data: EventFormValues) => {
         ...data,
         userId: session.user?.id,
       },
+    });
+  } catch (error) {
+    throw error;
+  }
+
+  revalidatePath("/dashboard");
+};
+
+export const updateActiveEvent = async (id: string, isActive: boolean) => {
+  try {
+    const session = await getUserSession();
+    await prisma.event.update({
+      where: {
+        id: id,
+        userId: session.user?.id,
+      },
+      data: { isActive },
     });
   } catch (error) {
     throw error;
