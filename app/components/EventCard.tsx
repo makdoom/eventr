@@ -29,6 +29,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import { useEvent } from "@/store/eventStore";
 
 type EventCardPropType = EventFormValues & { id: string };
 
@@ -38,8 +39,10 @@ const EventCard = ({
   description,
   duration,
   isActive,
+  url,
   videoCallSoftware,
 }: EventCardPropType) => {
+  const { handleOpen, handleEventDialogData } = useEvent();
   const [isEventActive, setIsActive] = useState(isActive);
 
   const onChange = async () => {
@@ -55,6 +58,20 @@ const EventCard = ({
     }
   };
 
+  const editEventHandler = () => {
+    handleEventDialogData({
+      id,
+      title,
+      url,
+      description,
+      isActive,
+      duration,
+      videoCallSoftware,
+    });
+    console.log("open");
+    handleOpen("EDIT");
+  };
+
   return (
     <Card className="cursor-pointer hover:shadow-lg transition-shadow">
       <CardHeader>
@@ -66,22 +83,26 @@ const EventCard = ({
             onCheckedChange={onChange}
           />
         </div>
-        <CardDescription>{description}</CardDescription>
+        <CardDescription>
+          {description?.length > 80
+            ? `${description.slice(0, 80)}...`
+            : description}
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="flex items-center space-x-4 text-sm text-muted-foreground">
           <div className="flex items-center bg-secondary p-1 px-2 rounded-sm">
             <Clock className="mr-1 h-4 w-4" />
-            <span className="text-xs font-semibold">{duration} min</span>
+            <span className="text-xs">{duration} min</span>
           </div>
           <div className="flex items-center">
-            <Video className="mr-1 h-5 w-5" />
-            <span className="text-xs font-semibold">{videoCallSoftware}</span>
+            <Video className="mr-1 h-4 w-4" />
+            <span className="text-xs ">{videoCallSoftware}</span>
           </div>
         </div>
         <div className="mt-6 flex justify-between items-center space-x-2">
           <Link href="/">
-            <Button variant="link" className="py-0">
+            <Button variant="link" className="p-0">
               <LinkIcon />
               <span className="text-sm">Copy Link</span>
             </Button>
@@ -92,12 +113,13 @@ const EventCard = ({
             </DropdownMenuTrigger>
             <DropdownMenuContent className="!mr-8 space-y-2">
               <DropdownMenuItem className="cursor-pointer">
-                <form>
-                  <button className="flex items-center gap-2">
-                    <Pencil />
-                    Edit
-                  </button>
-                </form>
+                <button
+                  className="flex items-center gap-2"
+                  onClick={editEventHandler}
+                >
+                  <Pencil />
+                  Edit
+                </button>
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer">
                 <form>

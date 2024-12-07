@@ -53,6 +53,7 @@ export type AvailabilityType = {
 };
 
 export const eventFormSchema = z.object({
+  id: z.string().optional(),
   title: z.string().min(1, "Title is required"),
   url: z.string(),
   description: z.string().min(1, "Description is required"),

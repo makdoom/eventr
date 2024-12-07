@@ -30,7 +30,7 @@ import { Loader, Plus } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { createNewEvent } from "../actions/events.action";
+import { createNewEvent, updatedEvent } from "../actions/events.action";
 
 const videoCallOption = [
   { label: "Google Meet", value: "Google Meet" },
@@ -48,7 +48,7 @@ const defaultValues: Partial<EventFormValues> = {
 };
 
 const EventDialog = () => {
-  const { open, handleOpen, handleClose } = useEvent();
+  const { open, handleOpen, data, handleClose, mode } = useEvent();
 
   const form = useForm<EventFormValues>({
     resolver: zodResolver(eventFormSchema),
@@ -57,10 +57,16 @@ const EventDialog = () => {
 
   const onSubmit = async (data: EventFormValues) => {
     try {
-      await createNewEvent(data);
+      if (mode == "NEW") {
+        await createNewEvent(data);
+      } else {
+        await updatedEvent(data);
+      }
       form.reset();
       handleClose();
-      toast.success("New event created");
+      toast.success(
+        mode == "NEW" ? "New event created" : "Event updated successfully"
+      );
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
@@ -79,6 +85,19 @@ const EventDialog = () => {
     }
   }, [title, form]);
 
+  useEffect(() => {
+    if (mode == "EDIT" && data) {
+      form.reset({
+        id: data.id,
+        ...data,
+      });
+    } else {
+      form.reset({
+        ...defaultValues,
+      });
+    }
+  }, [mode, data, form]);
+
   return (
     <Dialog
       open={open}
@@ -93,9 +112,13 @@ const EventDialog = () => {
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Add a new event type</DialogTitle>
+          <DialogTitle>
+            {mode == "EDIT" ? "Update Event" : "Add a new event type"}
+          </DialogTitle>
           <DialogDescription>
-            Create a new event type for people to book times with.
+            {mode == "NEW"
+              ? "Create a new event type for people to book times with."
+              : ""}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -210,7 +233,7 @@ const EventDialog = () => {
                 {form.formState.isSubmitting && (
                   <Loader className="animate-spin" />
                 )}
-                Create Event
+                {mode == "NEW" ? "Create Event" : "Update Event"}
               </Button>
             </div>
           </form>

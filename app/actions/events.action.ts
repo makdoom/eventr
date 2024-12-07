@@ -71,3 +71,20 @@ export const updateActiveEvent = async (id: string, isActive: boolean) => {
 
   revalidatePath("/dashboard");
 };
+
+export const updatedEvent = async (data: EventFormValues) => {
+  try {
+    const session = await getUserSession();
+    await prisma.event.update({
+      where: {
+        id: data?.id,
+        userId: session.user?.id,
+      },
+      data: { ...data },
+    });
+  } catch (error) {
+    throw error;
+  }
+
+  revalidatePath("/dashboard");
+};
