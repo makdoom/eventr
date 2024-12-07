@@ -5,7 +5,8 @@ import EventCard from "./EventCard";
 import { useMemo } from "react";
 
 type EventListPropType = {
-  eventList: {
+  userName: string;
+  events: {
     id: string;
     title: string;
     isActive: boolean;
@@ -16,19 +17,19 @@ type EventListPropType = {
   }[];
 };
 
-const EventLists = ({ eventList }: EventListPropType) => {
+const EventLists = ({ userName, events }: EventListPropType) => {
   const { searchValue } = useEvent();
 
   const filteredList = useMemo(() => {
-    return eventList.filter((item) =>
+    return events.filter((item) =>
       item.title.toLowerCase().includes(searchValue.toLowerCase())
     );
-  }, [eventList, searchValue]);
+  }, [events, searchValue]);
 
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3  grid-rows-auto overflow-auto w-full ">
       {filteredList?.map((event) => (
-        <EventCard key={event.id} {...event} />
+        <EventCard key={event.id} {...event} userName={userName} />
       ))}
     </div>
   );

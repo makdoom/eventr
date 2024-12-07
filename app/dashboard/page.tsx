@@ -10,7 +10,10 @@ const DashboardPage = async () => {
       <EventsHeader />
       <div className="mt-8 h-[calc(100vh-110px)] no-scrollbar">
         {userEvents?.events.length && (
-          <EventLists eventList={userEvents?.events} />
+          <EventLists
+            userName={userEvents.username as string}
+            events={userEvents.events}
+          />
         )}
       </div>
     </div>

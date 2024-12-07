@@ -34,8 +34,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import { useEvent } from "@/store/eventStore";
+import { useRouter } from "next/navigation";
 
-type EventCardPropType = EventFormValues & { id: string };
+type EventCardPropType = EventFormValues & { id: string; userName: string };
 
 const EventCard = ({
   id,
@@ -43,11 +44,13 @@ const EventCard = ({
   description,
   duration,
   isActive,
+  userName,
   url,
   videoCallSoftware,
 }: EventCardPropType) => {
   const { handleOpen, handleEventDialogData } = useEvent();
   const [isEventActive, setIsActive] = useState(isActive);
+  const router = useRouter();
 
   const onChange = async () => {
     setIsActive(!isEventActive);
@@ -101,12 +104,17 @@ const EventCard = ({
     }
   };
 
+  const navigateHandler = () => router.push(`/${userName}/${url}`);
+
   return (
-    <Card className="cursor-pointer hover:shadow-lg transition-shadow self-auto">
+    <Card
+      className="cursor-pointer hover:shadow-lg transition-shadow self-auto"
+      onClick={navigateHandler}
+    >
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="text-xl font-semibold">
-            {title.length > 30 ? `${title.slice(0, 30)}...` : title}
+            {title.length > 25 ? `${title.slice(0, 25)}...` : title}
           </CardTitle>
           <Switch
             checked={isEventActive}
@@ -132,7 +140,7 @@ const EventCard = ({
           </div>
         </div>
         <div className="mt-6 flex justify-between items-center space-x-2">
-          <Link href="/">
+          <Link href={`/${userName}/${url}`}>
             <Button variant="link" className="p-0">
               <LinkIcon />
               <span className="text-sm">Copy Link</span>
