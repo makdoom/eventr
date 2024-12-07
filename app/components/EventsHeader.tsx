@@ -1,8 +1,13 @@
+"use client";
+
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import EventDialog from "./EventDialog";
+import { useEvent } from "@/store/eventStore";
 
 const EventsHeader = () => {
+  const { searchValue, setSearchValue } = useEvent();
+
   return (
     <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
       <div>
@@ -16,8 +21,10 @@ const EventsHeader = () => {
           <Search className="absolute left-2 top-3 h-4 w-4 text-muted-foreground" />
           <Input
             autoFocus
+            value={searchValue}
             placeholder="Search events"
             className="pl-8 bg-secondary"
+            onChange={(event) => setSearchValue(event.target.value)}
           />
         </div>
 

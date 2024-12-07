@@ -19,7 +19,11 @@ import {
   Video,
 } from "lucide-react";
 import { toast } from "sonner";
-import { updateActiveEvent } from "../actions/events.action";
+import {
+  copyEvent,
+  deleteEvent,
+  updateActiveEvent,
+} from "../actions/events.action";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -68,15 +72,42 @@ const EventCard = ({
       duration,
       videoCallSoftware,
     });
-    console.log("open");
     handleOpen("EDIT");
   };
 
+  const deleteEventHandler = async () => {
+    try {
+      await deleteEvent(id);
+      toast.success("Event deleted successfully");
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        console.log(error);
+      }
+    }
+  };
+
+  const copyEventHandler = async () => {
+    try {
+      await copyEvent(id);
+      toast.success("Event copied successfully");
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        console.log(error);
+      }
+    }
+  };
+
   return (
-    <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+    <Card className="cursor-pointer hover:shadow-lg transition-shadow self-auto">
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle className="text-xl font-semibold">{title}</CardTitle>
+          <CardTitle className="text-xl font-semibold">
+            {title.length > 30 ? `${title.slice(0, 30)}...` : title}
+          </CardTitle>
           <Switch
             checked={isEventActive}
             value={+isEventActive}
@@ -122,12 +153,13 @@ const EventCard = ({
                 </button>
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer">
-                <form>
-                  <button className="flex items-center gap-2">
-                    <Copy />
-                    Copy
-                  </button>
-                </form>
+                <button
+                  className="flex items-center gap-2"
+                  onClick={copyEventHandler}
+                >
+                  <Copy />
+                  Copy
+                </button>
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer">
                 <form>
@@ -138,12 +170,13 @@ const EventCard = ({
                 </form>
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer">
-                <form>
-                  <button className="flex items-center gap-2">
-                    <Trash />
-                    Delete
-                  </button>
-                </form>
+                <button
+                  className="flex items-center gap-2"
+                  onClick={deleteEventHandler}
+                >
+                  <Trash />
+                  Delete
+                </button>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
