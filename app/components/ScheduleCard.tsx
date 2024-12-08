@@ -32,6 +32,7 @@ const ScheduleCard = ({
 }: ScheduleCardPropType) => {
   const { handleOpen, handleDialogData } = useAvailabilityDialog();
 
+  console.log(scheduleTimeList);
   const onDelete = async () => {
     try {
       await deleteSchedule(id);

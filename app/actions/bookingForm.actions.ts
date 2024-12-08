@@ -23,6 +23,9 @@ export const getBookingDetails = async (userName: string, eventUrl: string) => {
             email: true,
             image: true,
             availabilitySchedule: {
+              where: {
+                isDefault: true,
+              },
               select: {
                 id: true,
                 eventName: true,

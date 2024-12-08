@@ -20,6 +20,7 @@ export const getAvailableSchedules = async (userId: string) => {
     orderBy: { createdAt: "desc" },
   });
 
+  console.log(data);
   return data;
 };
 
@@ -67,7 +68,6 @@ export const createNewSchedule = async (formData: ScheduleFormValues) => {
 export const updatedSchedule = async (formData: ScheduleFormValues) => {
   const session = await getUserSession();
   const { id, eventName, schedule, isDefault } = formData;
-  console.log(id);
 
   if (!id) return;
 
@@ -84,7 +84,7 @@ export const updatedSchedule = async (formData: ScheduleFormValues) => {
       });
     }
 
-    await prisma.availabilitySchedule.update({
+    await tx.availabilitySchedule.update({
       where: {
         id,
         userId: session.user?.id,

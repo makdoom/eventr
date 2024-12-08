@@ -16,7 +16,7 @@ const BookingForm = async ({
 
   return (
     <div className="min-h-screen w-screen flex items-center justify-center">
-      <Card className="max-w-[1000px] w-full mx-auto bg-secondary">
+      <Card className="max-w-[1100px] w-full mx-auto bg-secondary/40">
         <CardContent className="p-5 md:grid md:grid-cols-[1fr,auto,1fr,auto,1fr] gap-4">
           <div>
             <div className="flex gap-2 items-center">
@@ -66,9 +66,11 @@ const BookingForm = async ({
             orientation="vertical"
             className="h-full w-[1px] bg-muted"
           />
-
-          {/* <Calendar /> */}
-          <RenderCalendar />
+          {data?.User?.availabilitySchedule && (
+            <RenderCalendar
+              availability={data?.User?.availabilitySchedule[0]}
+            />
+          )}
         </CardContent>
       </Card>
     </div>

@@ -13,51 +13,47 @@ const CalendarCell = ({
   state,
   date,
   currentMonth,
+  isUnavailable,
 }: {
   state: CalendarState;
   date: CalendarDate;
   currentMonth: CalendarDate;
+  isUnavailable?: boolean;
 }) => {
   const ref = useRef(null);
-  const {
-    cellProps,
-    buttonProps,
-    isSelected,
-    // isOutsideVisibleRange,
-    isDisabled,
-    // isUnavailable,s
-    formattedDate,
-  } = useCalendarCell({ date }, state, ref);
+  const { cellProps, buttonProps, isSelected, isDisabled, formattedDate } =
+    useCalendarCell({ date }, state, ref);
 
   const { focusProps, isFocusVisible } = useFocusRing();
   const isDateToday = isToday(date, getLocalTimeZone());
   const isOutsideOfMonth = !isSameMonth(currentMonth, date);
+  const finallyIsDisabled = isDisabled || isUnavailable;
 
   return (
     <td
       {...cellProps}
-      className={`py-0.5 px-0.5 relative ${isFocusVisible ? "z-10" : "z-0"}`}
+      className={`p-1 relative ${isFocusVisible ? "z-10" : "z-0"}`}
     >
       <div
         {...mergeProps(buttonProps, focusProps)}
         ref={ref}
         hidden={isOutsideOfMonth}
-        className="size-10 outline-none group rounded-md"
+        className="size-14 outline-none group rounded-md"
       >
         <div
           className={cn(
-            "size-full relative rounded-sm flex items-center justify-center text-sm font-semibold",
+            "size-full relative rounded-sm flex items-center justify-center font-semibold",
 
-            isDisabled ? "text-muted-foreground cursor-not-allowed" : "",
+            finallyIsDisabled ? "text-muted-foreground cursor-not-allowed" : "",
             isSelected ? "bg-primary text-primary-foreground" : "",
-            !isDisabled && !isSelected ? "hover:bg-primary/10 " : ""
+            !finallyIsDisabled && !isSelected ? "bg-secondary" : ""
           )}
         >
           {formattedDate}
           {isDateToday && (
             <div
               className={cn(
-                "absolute bottom-2 left-1/2 transform -translate-x-1/2 translate-y-1/2 size-1.5 rounded-full bg-primary",
+                "absolute bottom-3 left-1/2 transform -translate-x-1/2 translate-y-1/2 size-1.5 rounded-full bg-primary",
                 isSelected && "bg-primary-foreground"
               )}
             />

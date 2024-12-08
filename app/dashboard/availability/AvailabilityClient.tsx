@@ -16,31 +16,38 @@ type AvailabilityClientPropType = {
 };
 
 const getFormattedTimeStr = (data: Schedule[]) => {
-  const filtered = data.filter((item) => item.isActive);
-  const finalStr = filtered.reduce((acc, curr, index) => {
-    if (curr.isActive && !acc) {
-      acc += `${curr.day} `;
-    }
+  let prevItem: Schedule | null = null;
+  const finalStr = data.reduce((acc, curr, index) => {
+    if (curr.isActive) {
+      if (!prevItem) {
+        acc += index ? `|${curr.day}` : `${curr.day}`;
+      } else {
+        const prevTimeStr = `${prevItem.fromTime}${prevItem.tillTime}`;
+        const currTimestr = `${curr.fromTime}${curr.tillTime}`;
 
-    if (index !== 0 && curr.isActive) {
-      const prevItem = filtered[index - 1];
-      const prevTimeStr = `${prevItem.fromTime}-${prevItem.tillTime}`;
-      const currTimeStr = `${curr.fromTime}-${curr.tillTime}`;
+        if (prevTimeStr !== currTimestr) {
+          if (acc.includes(prevItem.day)) {
+            acc += `, ${prevItem.fromTime} - ${prevItem.tillTime}`;
+          } else {
+            acc += ` to ${prevItem.day}, ${prevItem.fromTime} - ${prevItem.tillTime}`;
+          }
 
-      if (prevTimeStr !== currTimeStr) {
-        if (!acc.includes(prevItem.day)) {
-          acc += ` to ${prevItem.day}, ${prevItem.fromTime} - ${prevItem.tillTime}`;
-        } else {
-          acc += `- ${prevItem.fromTime} - ${prevItem.tillTime}`;
+          acc += `|${curr.day}`;
+        } else if (index == data.length - 1) {
+          acc += ` to ${curr.day}, ${curr.fromTime} - ${curr.tillTime}`;
         }
-
-        acc += `|${curr.day} `;
-        if (index == filtered.length - 1) {
-          acc += `- ${curr.fromTime} - ${curr.tillTime}`;
-        }
-      } else if (index == filtered.length - 1) {
-        acc += ` to ${curr.day}, ${curr.fromTime}  -  ${curr.tillTime}`;
       }
+
+      prevItem = curr;
+    } else {
+      if (acc.length) {
+        if (prevItem && !acc.includes(prevItem?.day)) {
+          acc += ` to ${prevItem?.day}, ${prevItem?.fromTime} - ${prevItem?.tillTime}`;
+        } else if (prevItem?.isActive) {
+          acc += `, ${prevItem?.fromTime} - ${prevItem?.tillTime}`;
+        }
+      }
+      prevItem = null;
     }
 
     return acc;
