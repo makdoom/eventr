@@ -1,22 +1,31 @@
 import { getBookingDetails } from "@/app/actions/bookingForm.actions";
 import RenderCalendar from "@/app/components/bookingForm/RenderCalendar";
+import TimeTable from "@/app/components/bookingForm/TimeTable";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Clock, Video } from "lucide-react";
+import { Calendar, Clock, Video } from "lucide-react";
 
 const BookingForm = async ({
   params,
+  searchParams,
 }: {
   params: Promise<{ userName: string; eventUrl: string }>;
+  searchParams: { date?: string };
 }) => {
   const { userName, eventUrl } = await params;
   const data = await getBookingDetails(userName, eventUrl);
-  console.log(data);
+  console.log(data?.User?.availabilitySchedule);
+  const selectedDate = searchParams?.date
+    ? new Date(searchParams.date)
+    : new Date();
+  const formattedDate = new Intl.DateTimeFormat("en-US", {
+    dateStyle: "full",
+  }).format(selectedDate);
 
   return (
     <div className="min-h-screen w-screen flex items-center justify-center">
-      <Card className="max-w-[1100px] w-full mx-auto bg-secondary/40">
+      <Card className="max-w-[1200px] w-full mx-auto bg-secondary/40 h-[520px]">
         <CardContent className="p-5 md:grid md:grid-cols-[1fr,auto,1fr,auto,1fr] gap-4">
           <div>
             <div className="flex gap-2 items-center">
@@ -38,13 +47,20 @@ const BookingForm = async ({
               </p>
             </div>
 
-            <div className="mt-4 flex flex-col">
-              <h1 className="text-xl font-semibold">{data?.title}</h1>
+            <div className="mt-12 flex flex-col">
+              <h1 className="text-2xl font-semibold">{data?.title}</h1>
               <p className="my-2 text-muted-foreground text-sm">
                 {data?.description}
               </p>
 
               <div className="mt-6 flex flex-col gap-2">
+                <div className="inline-flex items-center">
+                  <Calendar className="mr-2 h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm text-muted-foreground">
+                    {formattedDate}
+                  </span>
+                </div>
+
                 <div className="inline-flex items-center">
                   <Clock className="mr-2 h-4 w-4 text-muted-foreground" />
                   <span className="text-sm text-muted-foreground">
@@ -66,8 +82,21 @@ const BookingForm = async ({
             orientation="vertical"
             className="h-full w-[1px] bg-muted"
           />
+
           {data?.User?.availabilitySchedule && (
             <RenderCalendar
+              availability={data?.User?.availabilitySchedule[0]}
+            />
+          )}
+
+          <Separator
+            orientation="vertical"
+            className="h-full w-[1px] bg-muted"
+          />
+
+          {data?.User?.availabilitySchedule && (
+            <TimeTable
+              selectedDate={selectedDate}
               availability={data?.User?.availabilitySchedule[0]}
             />
           )}

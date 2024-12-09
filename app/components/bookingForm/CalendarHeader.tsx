@@ -19,7 +19,7 @@ const CalendarHeader = ({
   prevButtonProps,
 }: CalendarHeaderPropType) => {
   const monthDateFormatter = useDateFormatter({
-    month: "short",
+    month: "long",
     year: "numeric",
     timeZone: state.timeZone,
   });

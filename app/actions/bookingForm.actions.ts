@@ -1,6 +1,7 @@
 "use server";
 
 import prisma from "../lib/db";
+import { getUserSession } from "../lib/hooks";
 
 export const getBookingDetails = async (userName: string, eventUrl: string) => {
   try {
@@ -22,6 +23,8 @@ export const getBookingDetails = async (userName: string, eventUrl: string) => {
             name: true,
             email: true,
             image: true,
+            grantEmail: true,
+            grantId: true,
             availabilitySchedule: {
               where: {
                 isDefault: true,
@@ -32,6 +35,8 @@ export const getBookingDetails = async (userName: string, eventUrl: string) => {
                 schedule: {
                   select: {
                     day: true,
+                    fromTime: true,
+                    tillTime: true,
                     isActive: true,
                   },
                 },
@@ -43,6 +48,13 @@ export const getBookingDetails = async (userName: string, eventUrl: string) => {
     });
 
     return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getSchedule = async () => {
+  try {
   } catch (error) {
     throw error;
   }
