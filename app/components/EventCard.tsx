@@ -24,7 +24,7 @@ import {
   deleteEvent,
   updateActiveEvent,
 } from "../actions/events.action";
-import { useState } from "react";
+import { MouseEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -109,7 +109,11 @@ const EventCard = ({
   return (
     <Card
       className="cursor-pointer hover:shadow-lg transition-shadow self-auto"
-      onClick={navigateHandler}
+      onClick={(e: MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        navigateHandler();
+      }}
     >
       <CardHeader>
         <div className="flex items-center justify-between">
@@ -147,14 +151,25 @@ const EventCard = ({
             </Button>
           </Link>
           <DropdownMenu>
-            <DropdownMenuTrigger className="outline-none bg-secondary  p-2 rounded-md group-hover:bg-primary-foreground">
-              <Ellipsis className="!size-5" />
+            <DropdownMenuTrigger
+              asChild
+              className="z-50 outline-none bg-secondary  p-2 rounded-md group-hover:bg-primary-foreground"
+            >
+              <Button
+                variant="outline"
+                onClick={(e: MouseEvent) => e.stopPropagation()}
+              >
+                <Ellipsis className="!size-5" />
+              </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="!mr-8 space-y-2">
               <DropdownMenuItem className="cursor-pointer">
                 <button
                   className="flex items-center gap-2"
-                  onClick={editEventHandler}
+                  onClick={(e: MouseEvent) => {
+                    e.stopPropagation();
+                    editEventHandler();
+                  }}
                 >
                   <Pencil />
                   Edit
@@ -163,7 +178,10 @@ const EventCard = ({
               <DropdownMenuItem className="cursor-pointer">
                 <button
                   className="flex items-center gap-2"
-                  onClick={copyEventHandler}
+                  onClick={(e: MouseEvent) => {
+                    e.stopPropagation();
+                    copyEventHandler();
+                  }}
                 >
                   <Copy />
                   Copy
@@ -180,7 +198,10 @@ const EventCard = ({
               <DropdownMenuItem className="cursor-pointer">
                 <button
                   className="flex items-center gap-2"
-                  onClick={deleteEventHandler}
+                  onClick={(e: MouseEvent) => {
+                    e.stopPropagation();
+                    deleteEventHandler();
+                  }}
                 >
                   <Trash />
                   Delete

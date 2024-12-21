@@ -1,7 +1,6 @@
 "use server";
 
 import prisma from "../lib/db";
-import { getUserSession } from "../lib/hooks";
 
 export const getBookingDetails = async (userName: string, eventUrl: string) => {
   try {

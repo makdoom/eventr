@@ -20,6 +20,7 @@ type RenderCalendarType = {
 };
 
 const RenderCalendar = ({ availability }: RenderCalendarType) => {
+  console.log(availability);
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -51,12 +52,14 @@ const RenderCalendar = ({ availability }: RenderCalendarType) => {
   }, [searchParams]);
 
   return (
-    <Calendar
-      minValue={today(getLocalTimeZone())}
-      isDateUnavailable={isDateUnavailable}
-      value={date}
-      onChange={handleDateChange}
-    />
+    availability?.schedule && (
+      <Calendar
+        minValue={today(getLocalTimeZone())}
+        isDateUnavailable={isDateUnavailable}
+        value={date}
+        onChange={handleDateChange}
+      />
+    )
   );
 };
 export default RenderCalendar;
